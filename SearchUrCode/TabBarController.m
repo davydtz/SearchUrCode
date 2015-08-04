@@ -20,12 +20,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.tabBar removeFromSuperview];
-    
+//    [self.tabBar.subviews removeFromSuperview];
+    // 删除系统自动生成的UITabBarButton
+
+
     TabBar *tabBar = [[TabBar alloc] init];
-    tabBar.frame = self.tabBar.frame;
-    tabBar.backgroundColor = [UIColor colorWithRed:0x44/255.0 green:0xCE/255.0 blue:0xF6/255.0 alpha:1];
-    [self.view addSubview:tabBar];
+    tabBar.frame = self.tabBar.bounds;
+    
+    [self.tabBar addSubview:tabBar];
     
     
     for (int i=0; i<3; i++) {
@@ -48,6 +50,14 @@
         [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchDown];
     }
     
+}
+-(void)viewWillAppear:(BOOL)animated{
+     [super viewWillAppear:animated];
+    for (UIView *child in self.tabBar.subviews) {
+        if ([child isKindOfClass:[UIControl class]]) {
+            [child removeFromSuperview];
+        }
+    }
 }
 -(void)buttonClick:(TabBarButton *)button{
     self.selectedIndex = button.tag;
